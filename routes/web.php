@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\DevAndAdminPagesController;
+use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -13,14 +16,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware( \App\Http\Middleware\EnsureBnetAuthenticated::class )->group( function() {
+
+    Route::get('/', function () { return view('dashboard'); })->name('HomePage');
+    Route::get('Data', [DevAndAdminPagesController::class, 'Data'])->name('Data');
+    
 });
 
-Route::get('Home', function (){
-    return 'Homepage !';
-});
+Route::get('Login', [LoginController::class, 'beginProcess'])->name('LoginPage');
+Route::get('Logout', [LoginController::class, 'Logout'])->name('Logout');
 
-Route::get('Home/{UserName}', function( $UserName ){
-    return "Welcome {$UserName}";
-});
+// BattleNet Oauth processing code received after user logged into Blizzard Account
+Route::get('Bnet/Oauth/', [LoginController::class, 'processingCode'])->name('BlizzardLandingPage');
