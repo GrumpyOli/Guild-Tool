@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap');
+
+* { box-sizing: border-box; }
+
+html, body {
+    font-size: 1em;
+    font-family: 'Oswald', sans-serif;
+    min-height: 100vh;
+}
+
+body {
+    background-image: url('/public/images/guild_selection_background.jpg');
+    background-size: auto;
+    background-repeat: no-repeat;
+    display: flex;
+}
+
+.container {
+    margin: auto;
+    padding: 1.50em;
+    background-color: rgba(255, 255, 255, 0.60);
+    border-radius: 0.25em;
+}
+
+.boxes {
+    display: flex;
+    width: 100%;
+}
+
+.box {
+    flex-basis:50%;
+    text-align: center;
+}
+
+select, input {
+    display: block;
+    margin-bottom: 0.50em;
+    width: 100%;
+}
+

@@ -2,11 +2,11 @@
 
 namespace App\Http\Middleware;
 
-use App\Blizzard\API\Token;
+use App\Models\wow\Guild;
 use Closure;
 use Illuminate\Http\Request;
 
-class EnsureBnetAuthenticated
+class EnsureGuildIsSelected
 {
     /**
      * Handle an incoming request.
@@ -18,13 +18,12 @@ class EnsureBnetAuthenticated
     public function handle(Request $request, Closure $next)
     {
 
-        $Token = Token::retrieve();
+        $Guild = Guild::session_retrieve();
 
-        if ( !$Token || $Token->isExpired() ){
-            return redirect()->route('LoginPage');
+        if ( !$Guild ){
+            return redirect()->route('GuildSelection');
         }
-
-        return $next($request);
         
+        return $next($request);
     }
 }

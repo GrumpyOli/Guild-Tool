@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guild-Tool - @yield('title')</title>
-    <link rel="stylesheet" href="{{ asset('css/mainLayout.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/layout-main.css') }}">
 </head>
 <body>
 
@@ -18,11 +18,11 @@
             <li>Manage Groups</li>
             <li>Manage Tracking</li>
             <li>View weekly vault</li>
-            <li>View guild roster</li>
+            <li><a href="{{ route('Roster') }}">View guild roster</a></li>
             <li>Guild Notes</li>
-            <li>Manage account</li>
-            <li>Disconnet</li>
-            <li><a href="{{ route('Data') }}">Data (For dev)</a></li>
+            <li><a href="{{ route('Account') }}">Manage account</a></li>
+            <li><a href="{{ route('Logout') }}">Disconnet</a></li>
+            <li><a href="{{ route('admin.data') }}">Data (For dev)</a></li>
         </ul>
     </nav>
     @show

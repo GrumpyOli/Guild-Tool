@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Blizzard\Connection;
+namespace App\Blizzard\API;
 
+use App\Blizzard\API\Url;
+use App\Curl\Curl;
 use \Datetime;
 
 class Token {
@@ -82,25 +84,27 @@ class Token {
     static public function register( Token $Token ){
         session(['BlizzardToken' => $Token]);
     }
-/*
-    static public function getInfos( Token $Token, $Region = 'us', bool $Validate = true ){
 
-        if ( $Validate && !self::validate( $Token ) ) {
+    public function getInfos( bool $Validate = false ){
+
+        if ( $Validate && !self::validate( $this ) ) {
             throw new \Exception('Invalid Token');
         }
 
-        $Url = \Bnet\API::buildOAuthUrl($Region, \Bnet\API::PATH_USER_INFO );
-        
+        $Url = Url::userInfo();      
 
-        $Curl = new \Application\Curl($Url);
-        $Curl->handleList->setOption(\CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . $Token->getAccessToken() ] );
+        $Curl = new Curl($Url);
+        $Curl->handleList->setOption(\CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . $this->getAccessToken() ] );
         $Curl->execute();
+        // $Curl->dump();
 
         $Response = $Curl->responseList->getOne();
 
         return $Response->getJSON();
 
     }
+
+    
 
     static public function validate( Token $Token, $Region = 'us' ): array|object {
 
@@ -121,5 +125,5 @@ class Token {
         }
 
     }
-*/
+
 }

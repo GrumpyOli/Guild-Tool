@@ -1,0 +1,38 @@
+{
+    "Time": "Sunday, 13-Nov-22 20:49:07 EST",
+    "Log": [
+        "Initializing a new Curl Object",
+        "Saving the log path under C:\\inetpub\\wwwroot\\Guild-Tool\\storage\\curl\\logs",
+        "Initializing handleList",
+        "Creating a App\\Curl\\Src\\handleList instance",
+        "Adding URL: https://oauth.battle.net/oauth/userinfo",
+        "Initializing responseList",
+        "Creating a App\\Curl\\Src\\responseList instance",
+        "Initializing CurlMultiHandle",
+        "Applying options CURLOPT_HTTPHEADER (10023) => [Authorization: Bearer UShMhcPcf0s05wnB7DGy4JCfFF16zLTW4O]",
+        "Starting the execution of 1 requests",
+        "Auto dump response to file is set to: 1",
+        "Timeout is set to: 5",
+        "Watch for options value with ** because they could be another option",
+        "Applying 4 options values to the list",
+        "Applying options CURLOPT_RETURNTRANSFER (19913) => 1",
+        "Applying options CURLOPT_SSL_VERIFYPEER (64) => 0",
+        "Applying options CURLOPT_CONNECTTIMEOUT (78) => 5",
+        "Applying options CURLOPT_TIMEOUT (13) => 30",
+        "Return the element 0",
+        "Response 200 received for url: https://oauth.battle.net/oauth/userinfo"
+    ],
+    "Response": [
+        {
+            "url": "https://oauth.battle.net/oauth/userinfo",
+            "errorNo": 0,
+            "errorMessage": "No error",
+            "status": 200,
+            "data": {
+                "sub": "101304754",
+                "id": 101304754,
+                "battletag": "Olivierl21#1442"
+            }
+        }
+    ]
+}

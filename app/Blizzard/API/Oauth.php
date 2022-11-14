@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Blizzard\Connection;
+namespace App\Blizzard\API;
 
+use App\Models\BlizzardAccount;
 use DateTimeInterface;
 
 /**
@@ -121,6 +122,15 @@ class Oauth {
                 // Storing the token in the database
 
                 Token::register( $this->Token );
+
+                $userInfos = $this->Token->getInfos();
+
+                // Saving data in the database
+                $Account = BlizzardAccount::firstOrCreate([
+                                'id' => $userInfos->id
+                            ]);
+                $Account->battle_tag = $userInfos->battletag;
+                $Account->save();
                 
                 return $this->Token;
                 

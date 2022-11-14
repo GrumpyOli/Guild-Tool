@@ -13,10 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('password_resets', function (Blueprint $table) {
-            $table->string('email')->index();
-            $table->string('token');
-            $table->timestamp('created_at')->nullable();
+        //
+        Schema::create('Blizzard_Accounts', function (Blueprint $table) {
+            $table->integer('id')->unsigned();
+            $table->primary('id');
+            $table->string('battle_tag')->nullable();
+            $table->string('email')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -27,6 +30,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('password_resets');
+        //
+        Schema::dropIfExists('Blizzard_Accounts');
+
     }
 };

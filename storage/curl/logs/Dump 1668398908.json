@@ -1,0 +1,42 @@
+{
+    "Time": "Sunday, 13-Nov-22 23:08:28 EST",
+    "Log": [
+        "Applying all locale to url received",
+        "Initializing a new Curl Object",
+        "Saving the log path under C:\\inetpub\\wwwroot\\Guild-Tool\\storage\\curl\\logs",
+        "Initializing handleList",
+        "Creating a App\\Curl\\Src\\handleList instance",
+        "Adding URL: https://us.api.blizzard.com/data/wow/guild/aegwynn/westfall-brewing-company?namespace=profile-US&locale=en_US",
+        "Initializing responseList",
+        "Creating a App\\Curl\\Src\\responseList instance",
+        "Initializing CurlMultiHandle",
+        "Getting and storing Bnet Token",
+        "Token found and store to the cUrl Object.",
+        "Applying the token to all headers",
+        "Applying options CURLOPT_HTTPHEADER (10023) => [Authorization: Bearer UShMhcPcf0s05wnB7DGy4JCfFF16zLTW4O]",
+        "Starting the execution of 1 requests",
+        "Auto dump response to file is set to: 1",
+        "Timeout is set to: 5",
+        "Watch for options value with ** because they could be another option",
+        "Applying 4 options values to the list",
+        "Applying options CURLOPT_RETURNTRANSFER (19913) => 1",
+        "Applying options CURLOPT_SSL_VERIFYPEER (64) => 0",
+        "Applying options CURLOPT_CONNECTTIMEOUT (78) => 5",
+        "Applying options CURLOPT_TIMEOUT (13) => 30",
+        "Return the element 0",
+        "Response 404 received for url: https://us.api.blizzard.com/data/wow/guild/aegwynn/westfall-brewing-company?namespace=profile-US&locale=en_US"
+    ],
+    "Response": [
+        {
+            "url": "https://us.api.blizzard.com/data/wow/guild/aegwynn/westfall-brewing-company?namespace=profile-US&locale=en_US",
+            "errorNo": 0,
+            "errorMessage": "No error",
+            "status": 404,
+            "data": {
+                "code": 404,
+                "type": "BLZWEBAPI00000404",
+                "detail": "Not Found"
+            }
+        }
+    ]
+}

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Blizzard\Connection\Token;
-use App\Blizzard\Connection\Oauth;
+use App\Blizzard\API\Token;
+use App\Blizzard\API\Oauth;
 
 class LoginController extends Controller
 {

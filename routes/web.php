@@ -1,7 +1,10 @@
 <?php
 
-use App\Http\Controllers\DevAndAdminPagesController;
+use App\Http\Controllers\adminCommands;
+use App\Http\Controllers\GuildController;
 use App\Http\Controllers\LoginController;
+use App\Http\Middleware\EnsureGuildIsSelected;
+use App\Http\Middleware\EnsureBnetAuthenticated;
 use Illuminate\Support\Facades\Route;
 
 
@@ -16,10 +19,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware( \App\Http\Middleware\EnsureBnetAuthenticated::class )->group( function() {
-
+Route::middleware( EnsureBnetAuthenticated::class, EnsureGuildIsSelected::class )->group( function(){
     Route::get('/', function () { return view('dashboard'); })->name('HomePage');
-    Route::get('Data', [DevAndAdminPagesController::class, 'Data'])->name('Data');
+    Route::get('/Roster', [GuildController::class, 'viewRoster'])->name('Roster');
+    Route::get('/Account', function(){ return 'Account'; })->name('Account');
+});
+
+Route::middleware( EnsureBnetAuthenticated::class )->group( function (){
+
+    Route::get('/GuildSelect', [GuildController::class, 'guildSelection'])->name('GuildSelection');
+    Route::post('/GuildSelect', [GuildController::class, 'formSubmitted'])->name('GuildSelection');
+    
+});
+
+Route::group([ 'prefix' => '/admin', 'as' => 'admin.'], function(){
+    
+    Route::get('data', [adminCommands::class, 'viewData'])->name('data');
+    Route::get('fetch_realm_data', [adminCommands::class, 'fetch_realm_data'])->name('fetch_realm_data');
+    Route::match(['GET', 'POST'], 'api_request', [adminCommands::class, 'api_request'])->name('api_request');
+    Route::redirect('/', 'admin/data');
     
 });
 
