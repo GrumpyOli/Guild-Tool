@@ -6,8 +6,22 @@ use App\Curl\Curl;
 
 class CurlList implements \Iterator, \Countable {
 
+    /**
+     * Contains every object in the array
+     * @var array
+     */
     protected array $list = [];
+
+    /**
+     * iteratorPosition (iterator Interface)
+     * @var int
+     */
     protected int $iteratorPosition = 0;
+
+    /**
+     * Big Curl Daddy
+     * @var Curl
+     */
     protected Curl $parentCurl;
 
     public function __construct(Curl $parentCurl){
@@ -24,12 +38,21 @@ class CurlList implements \Iterator, \Countable {
         }
     }
 
-    public function getOne(){
+    /**
+     * Return the first item in the list
+     * @param bool $JSON 
+     * @return mixed 
+     */
+    public function first(){
         return $this->list[0] ?? Null;
     }
 
-    public function getAll(){
-        return $this->list;
+    /**
+     * Return all items
+     * @return $this 
+     */
+    public function all(){
+        return $this;
     }
 
     public function item( int $index = 0 ){
@@ -43,7 +66,7 @@ class CurlList implements \Iterator, \Countable {
 
     // Iterator interface mandatory functions to make it work with foreach
     public function rewind(): void { $this->iteratorPosition = 0; }
-    public function current(){ return $this->list[ $this->iteratorPosition]; }
+    public function current(){ return $this->list[ $this->iteratorPosition ]; }
     public function key(): int { return $this->iteratorPosition; }
     public function next(): void { $this->iteratorPosition++; }
     public function valid(): bool { return isset( $this->list[ $this->iteratorPosition ]); }

@@ -2,10 +2,10 @@
 
 namespace App\Blizzard\API\src;
 
-use App\Curl\Src\Response as SrcResponse;
+use App\Curl\Src\Response as curlResponse;
 
 
-class Response extends SrcResponse {
+class Response extends curlResponse {
 
     public function hasBlizzardError(){
 

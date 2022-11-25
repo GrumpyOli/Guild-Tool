@@ -94,13 +94,13 @@ class Token {
         $Url = Url::userInfo();      
 
         $Curl = new Curl($Url);
-        $Curl->handleList->setOption(\CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . $this->getAccessToken() ] );
+        $Curl->handles()->setOption(\CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . $this->getAccessToken() ] );
         $Curl->execute();
         // $Curl->dump();
 
-        $Response = $Curl->responseList->getOne();
+        $Response = $Curl->responses()->first()->getJSON();
 
-        return $Response->getJSON();
+        return $Response;
 
     }
 

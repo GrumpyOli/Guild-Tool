@@ -13,12 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        //
-        Schema::create('Blizzard_Accounts', function (Blueprint $table) {
-            $table->integer('id')->unsigned();
-            $table->primary('id');
-            $table->string('battle_tag')->nullable();
-            $table->string('email')->nullable();
+        Schema::create('linked_characters', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedInteger('guild_id');
+            $table->unsignedInteger('character_id');
             $table->timestamps();
         });
     }
@@ -30,8 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        //
-        Schema::dropIfExists('Blizzard_Accounts');
-
+        Schema::dropIfExists('linked_characters');
     }
 };

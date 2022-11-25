@@ -13,12 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('rosters', function (Blueprint $table) {
             $table->id();
-            $table->integer('account_id')->unsigned();
-            $table->string('email')->unique()->nullable();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('timezone')->nullable();
+            $table->integer('char_id')->unsigned();
+            $table->integer('guild_id')->unsigned();
+            $table->smallInteger('rank')->unsigned();
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('rosters');
     }
 };

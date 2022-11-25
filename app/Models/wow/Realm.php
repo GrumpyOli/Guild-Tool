@@ -3,6 +3,7 @@
 namespace App\Models\wow;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Database\Factories\RealmFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Realm extends Model
@@ -35,4 +36,9 @@ class Realm extends Model
      */
     public $incrementing = false;
 
+
+    protected static function newFactory(){
+        return RealmFactory::new();
+    }
+    
 }

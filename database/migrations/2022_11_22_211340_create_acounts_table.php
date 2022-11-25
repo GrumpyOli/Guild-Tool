@@ -13,18 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        //
-        if( !Schema::hasTable('realms') ){
-            Schema::create('realms', function (Blueprint $table) {
+        Schema::create('accounts', function (Blueprint $table) {
             $table->integer('id')->unsigned();
             $table->primary('id');
-            $table->string('name')->nullable();
-            $table->string('slug')->nullable();
-            $table->string('region')->nullable();
+            $table->string('battle_tag');
+            $table->integer('user_id')->nullable();
             $table->timestamps();
-            });
-        }
-        
+        });
     }
 
     /**
@@ -34,7 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        //
-    //    Schema::dropIfExists('realms');
+        Schema::dropIfExists('accounts');
     }
 };

@@ -6,10 +6,11 @@ use App\Blizzard\API\Helpers;
 use App\Blizzard\API\APIRequest;
 use App\Blizzard\API\Token;
 use App\Blizzard\API\Url;
+use App\Models\guild_search_history;
 use App\Models\wow\Guild;
 use App\Models\wow\Realm;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class GuildController extends Controller
 {
@@ -18,6 +19,7 @@ class GuildController extends Controller
 
         $Regions = Helpers::Regions;
         $Realms = Realm::all()->where('region', '=', 'US')->sortBy('name');
+        $SearchHistory = guild_search_history::all()->where('account_id', '=', Auth::user()->account->id )->take(5);
 
         return view('guild_selection', [
             'Regions' => $Regions,
@@ -40,7 +42,15 @@ class GuildController extends Controller
          ]);
         
          if ( $Guild ){
+
             Guild::session_register( $Guild );
+
+            // Creating an entry for guild search history
+            guild_search_history::updateOrCreate([
+                'guild_id' => $Guild->id,
+                'account_id' => Auth::user()->account->id
+            ]);
+
             return redirect()->route('HomePage');
          }
 
@@ -49,13 +59,13 @@ class GuildController extends Controller
            $Url = Url::guildInfos( $validatedData['realmSlug'], Helpers::parseToSlug($validatedData['name']) );
            $APIRequest = new APIRequest( $Url );
            $APIRequest->execute();
-           $APIRequestStatusCode = $APIRequest->getOne()->getStatus();
+           $APIRequestStatusCode = $APIRequest->responses()->first()->getStatus();
    
            if ( $APIRequestStatusCode !== 200 ){
-               return redirect()->back()->withErrors($APIRequest->getOne()->BlizzardError() );
+               return redirect()->back()->withErrors( $APIRequest->responses()->first()->BlizzardError() );
            }
    
-           $Data = $APIRequest->getOne()->getJSON();
+           $Data = $APIRequest->responses()->first()->getJSON();
            $Guild = new Guild;
            $Guild->id = $Data->id;
            $Guild->name = $Data->name;

@@ -23,6 +23,7 @@ class APIRequest extends Curl {
 
         // Applying the locale in the url
         $this->log('Applying all locale to url received');
+
         $Urls = array_map( [$this, 'setLocalInUrl'], $Urls);
 
         // Calling parent constructor
@@ -64,14 +65,15 @@ class APIRequest extends Curl {
         
         // Setting the token to all curl headers
         $this->log('Applying the token to all headers');
-        $this->handleList->setOption(CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . $this->Token->getAccessToken() ] );
+        $this->handles->setOption(CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . $this->Token->getAccessToken() ] );
 
         // Continue with the Curl Object
         parent::execute();
+        
     }
 
     protected function addResponse( \CurlHandle $CurlHandle, string $rawResponse ){
-        $this->responseList->add( new Response( $CurlHandle, $rawResponse ) );
+        $this->responses->add( new Response( $CurlHandle, $rawResponse ) );
     }
 
 
@@ -79,17 +81,21 @@ class APIRequest extends Curl {
 // Standalone function that can be call statically
 
     /**
-     * It is a shortcut function to execute a request and return the object already executed.
-     * @param string|array $request Url(s) to be sent to blizzard
-     * @param bool $throwException If true, it will throws Exception on every error
-     * @return Request 
-     * @throws Exception 
-     * @throws UnauthorizedAccessException 
+     * Return a response from an executed cUrl request
+     * @param string $Url 
+     * @return Response 
      */
-    static function quickExecute ( string ... $Urls ): Request {
-        $Object = new self(... $Urls);
+    static public function getFirst( string $Url ): Response {
+
+        $Object = new self( $Url );
+        $Object->dumpIfError();
         $Object->execute();
-        return $Object;
+
+        return $Object->responses()->first( false );
+    }
+
+    static public function getFirstJSON( $Url ){
+        return self::getFirst( $Url )->getJSON();
     }
 
     /**

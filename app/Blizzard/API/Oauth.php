@@ -2,8 +2,10 @@
 
 namespace App\Blizzard\API;
 
-use App\Models\BlizzardAccount;
+use App\Models\Blizzard\Account;
+use App\Models\User;
 use DateTimeInterface;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class : Oauth
@@ -126,12 +128,20 @@ class Oauth {
                 $userInfos = $this->Token->getInfos();
 
                 // Saving data in the database
-                $Account = BlizzardAccount::firstOrCreate([
-                                'id' => $userInfos->id
+                $User = User::firstOrCreate([
+                                'account_id' => $userInfos->id
                             ]);
-                $Account->battle_tag = $userInfos->battletag;
-                $Account->save();
+
+                Auth::login( $User );
                 
+                $blizzard_account = Account::updateOrCreate([
+                    'id' => $userInfos->id
+                ],
+                [
+                    'battle_tag' => $userInfos->battletag,
+                    'user_id' => $User->id
+                ]);
+
                 return $this->Token;
                 
             default:

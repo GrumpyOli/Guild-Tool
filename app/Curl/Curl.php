@@ -3,9 +3,10 @@
 namespace App\Curl;
 
 use App\Curl\Src\Handle;
-use App\Curl\Src\handleList;
-use App\Curl\Src\responseList;
+use App\Curl\Src\Handles;
+use App\Curl\Src\Responses;
 use App\Curl\Src\Response;
+use CurlMultiHandle;
 use stdClass;
 
 /**
@@ -34,26 +35,102 @@ use stdClass;
  */
 class Curl {
 
+    //--- Settings
+
+    /**
+     * Setting if the object has to throw exception or go silent
+     * @var bool
+     */
     protected bool $throwException = true;
+
+    /**
+     * Default timeout applied to Curl Object
+     * @var int
+     */
+    protected int $timeout = 5;
+
+    /**
+     * If enabled, every cUrl request will be dump into a file
+     * @var bool
+     */
+    protected bool $dumpToFile = false;
+
+    /**
+     * Default log folder (where the file will be dump)
+     * @var string
+     */
+    protected string $logFolder = '\curl\logs';
+
+    /**
+     * To be determined
+     * @var string
+     */
+    protected string $logPath = '';
+
+
+    //--- Object private object and handler
+
+    /**
+     * Curl Multi Handler
+     * @var CurlMultiHandle
+     */
     protected \CurlMultiHandle $CurlMultiHandle;
-    protected handleList $handleList;
-    protected responseList $responseList;
+
+    /**
+     * Returns a collection of handles
+     * @var handleList
+     */
+    protected Handles $handles;
+
+    /**
+     * Returns a collection of responses (after being executed)
+     * @var Responses
+     */
+    protected Responses $responses;
+
+    /**
+     * Contains default curl options that will be applied to every curl request
+     * @var array
+     */
     protected array $defaultCurlOptions = [
         \CURLOPT_RETURNTRANSFER => 1,
         \CURLOPT_SSL_VERIFYPEER => 0,
         \CURLOPT_CONNECTTIMEOUT => 5,
         \CURLOPT_TIMEOUT => 30                  
     ];
+
+    /**
+     * Contains Curl Options to be applied AFTER the default options
+     * @var array
+     */
     protected array $curlOptions = [];
+
+    /**
+     * Contains all log
+     * @var array
+     */
     protected array $Log = [];
+    
+    /**
+     * Timer for object (for logging purpose)
+     * @var float
+     */
+    protected float $startingTime;
 
-    // Some settings ..
-    protected int $timeout = 5;
-    protected bool $dumpToFile = true;
+    /**
+     * Curl Object will dump if it detects an error
+     * @var bool
+     */
+    protected bool $dumpIfError = false;
 
-    protected string $logFolder = '\curl\logs';
-    protected string $logPath = '';
+    /**
+     * Store the last response (called statically) into the object
+     * @var mixed
+     */
+    static protected $lastRequest;
 
+
+    //--- Class Start
 
     /**
      * Creating a new Curl Object to handle Curl Request
@@ -64,42 +141,62 @@ class Curl {
 
         $this->log('Initializing a new Curl Object');
 
+        $this->dumpToFile = env('CURL_DUMP_TO_FILE', false);
+
         // Adjusting the log folder
         $this->logPath = storage_path() . $this->logFolder;
+
+        $this->log("Dump to file value is {$this->dumpToFile}");
         $this->log("Saving the log path under {$this->logPath}");
-        $this->log('Initializing handleList');
-        $this->handleList = new handleList($this, ... $Urls);
-        $this->log('Initializing responseList');
-        $this->responseList = new responseList( $this );
+        $this->log('Initializing handles object');
+        $this->handles = new Handles($this, ... $Urls);
+        $this->log('Initializing responses object');
+        $this->responses = new Responses( $this );
         $this->log('Initializing CurlMultiHandle');
         $this->CurlMultiHandle = curl_multi_init();
     }
 
-    function __get( $keyName ){
-        switch ( $keyName ){
-            case 'throwException':
-            case 'defaultCurlOptions':
-            case 'handleList':
-            case 'responseList':
-            case 'timeout':
-            case 'dumpToFile':
-            case 'fileFolder':
-                return $this->{$keyName};
-            default :
-                throw new \Exception('Invalid key name for this object');    
-        }
+    /**
+     * Return all responses
+     * @param string $statusCode All | 200 | 404 | 500 ..
+     * @return responseList 
+     */
+    public function responses( $statusCode = 'All' ){
+        return $this->responses;
     }
 
     /**
-     * Add new Curl Handle inside the object
-     * @param string[] $Urls 
-     * @return void 
+     * Return all handles
+     * @return handleList 
      */
-    public function addUrl( string ... $Urls ): void {
-        foreach( $Urls as $Url ){
+    public function handles(){
+        return $this->handles;
+    }
+
+    /**
+     * Enable the option to dump if it detects an error
+     * @param bool $bool True|False
+     * @return $this 
+     */
+    public function dumpIfError( $bool = true){
+        $this->dumpIfError = $bool;
+        return $this;
+    }
+
+    /**
+     * Adding url to the object
+     * @param string[] $Urls 
+     * @return $this 
+     */
+    public function addUrl( string ... $Urls ) {
+
+        foreach( $Urls as $Url )
             $this->log("Adding {$Url}");
-        }
-        $this->handleList->add( ... $Urls );
+        
+        $this->handles->add( ... $Urls );
+
+        return $this;
+
     }
 
     /**
@@ -109,22 +206,22 @@ class Curl {
      */
     public function execute(){
 
-        $this->log("Starting the execution of {$this->handleList->count()} requests");
+        $this->log("Starting the execution of {$this->handles->count()} requests");
         $this->log("Auto dump response to file is set to: {$this->dumpToFile}");
         $this->log("Timeout is set to: {$this->timeout}");
         $this->log("Watch for options value with ** because they could be another option");
 
         // Applying default options to all Curl Request
-        $this->handleList->setOptions( $this->defaultCurlOptions );
-        $this->handleList->setOptions( $this->curlOptions );
+        $this->handles->setOptions( $this->defaultCurlOptions );
+        $this->handles->setOptions( $this->curlOptions );
 
-        if ( count( $this->handleList ) < 1 ){
+        if ( count( $this->handles ) < 1 ){
             $this->log('There is no queries to be executed');
         }
 
         // Handling single request
         if ( $this->isSingleRequest() === true ){
-            $CurlHandle = $this->handleList->item(0);
+            $CurlHandle = $this->handles->item(0);
             $this->handleResponse( $CurlHandle );
         }
 
@@ -133,7 +230,7 @@ class Curl {
 
             // Adding each request to the multi handler
             $this->log('Adding every curl request to the CurlMultiHandler');
-            foreach( $this->handleList as $CurlHandle){
+            foreach( $this->handles as $CurlHandle){
                 \curl_multi_add_handle( $this->CurlMultiHandle, $CurlHandle->getHandle() );
             }
             
@@ -155,14 +252,14 @@ class Curl {
             }else{
                 //Handling each responses
                 $this->log('Execution finished');
-                foreach( $this->handleList as $CurlHandle ){
+                foreach( $this->handles as $CurlHandle ){
                     $this->handleResponse( $CurlHandle );
                 }       
             }
         }
 
         if ( $this->dumpToFile === true ){
-            $this->dump();
+            $this->dumpToFile();
         }
 
         return $this;
@@ -185,18 +282,6 @@ class Curl {
         }
 
         $this->log("Adding curl options {".self::getOptionName($Options)."} {$Options} to value {$Value}");
-    }
-
-    public function getOne(): Response {
-        return $this->responseList->getOne();
-    }
-
-    public function getAll(): array {
-        return $this->responseList->getAll();
-    }
-
-    public function getFirst(): ?stdClass {
-        return $this->responseList->getOne()->getJSON();
     }
 
     protected function handleResponse( Handle $CurlHandle ){
@@ -223,7 +308,7 @@ class Curl {
     }
 
     protected function addResponse( \CurlHandle $CurlHandle, string $rawResponse ){
-        $this->responseList->add( new Response( $CurlHandle, $rawResponse ) );
+        $this->responses->add( new Response( $CurlHandle, $rawResponse ) );
     }
 
     public function log( string $message, ... $sprintfOptions){
@@ -231,14 +316,14 @@ class Curl {
     }
 
     protected function isSingleRequest(): bool {
-        return (bool) ( count( $this->handleList ) === 1 );
+        return (bool) ( count( $this->handles ) === 1 );
     }
 
     protected function isMultipleRequest(): bool {
-        return (count( $this->handleList ) > 1 ) ? true : false ;
+        return (count( $this->handles ) > 1 ) ? true : false ;
     }
 
-    public function dump(): void {
+    public function dumpToFile(): void {
 
         $fileName = $this->logPath . \DIRECTORY_SEPARATOR . 'Dump ' . time() . '.json';
         $DateTime = new \DateTime();
@@ -248,7 +333,7 @@ class Curl {
             'Log' => $this->Log
         ];
 
-        foreach( $this->responseList as $Response ){
+        foreach( $this->responses as $Response ){
             $Dump['Response'][] = $Response->Dump();
         }
 
@@ -291,6 +376,13 @@ class Curl {
 
     }
 
+    public function autoDump( bool $bool = true ){
+        
+        $this->dumpToFile = (bool) $bool;
+
+        return $this;
+    }
+
     /**
      * Developpement purpose
      * @return void 
@@ -305,6 +397,33 @@ class Curl {
             }
         }
 
+    }
+
+
+    //--- Static Functions
+
+    /**
+     * Execute and get the first response
+     * @param string $Url Url to query
+     * @return mixed 
+     */
+    static public function getFirst( string $Url ): Response{
+
+        $Object = new self( $Url );
+        $Object->dumpIfError();
+        $Object->execute();
+
+        return $Object->responses()->first();
+
+    }
+
+    /**
+     * Execute and return a JSON decoded object
+     * @param mixed $Url Url to query
+     * @return mixed 
+     */
+    static public function getFirstJSON( $Url ){
+        return self::getFirst( $Url, true );
     }
 
 }

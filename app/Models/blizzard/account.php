@@ -1,21 +1,24 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Blizzard;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class BlizzardAccount extends Model
+class Account extends Model
 {
     use HasFactory;
 
-    /**
+   /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'id'
+        'id',
+        'battle_tag',
+        'user_id'
     ];
 
     /**
@@ -23,7 +26,7 @@ class BlizzardAccount extends Model
      *
      * @var string
      */
-    protected $table = 'blizzard_accounts';
+    protected $table = 'accounts';
 
     /**
      * Indicates if the model's ID is auto-incrementing.
@@ -31,5 +34,9 @@ class BlizzardAccount extends Model
      * @var bool
      */
     public $incrementing = false;
-    
+
+    public function user(){
+        return $this->hasOne( User::class );
+    }
+
 }

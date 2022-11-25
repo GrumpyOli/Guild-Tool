@@ -5,11 +5,17 @@ namespace App\Http\Controllers;
 use App\Blizzard\API\Token;
 use Illuminate\Http\Request;
 use App\Blizzard\API\APIRequest;
+use App\Blizzard\API\Helpers;
 use App\Blizzard\API\Url;
+use App\Curl\Curl;
+use App\Models\Wow\Character;
+use App\Models\wow\Dungeon;
 use App\Models\wow\Guild;
 use App\Models\wow\Realm;
+use App\RaiderIO\API\Url as RaiderIOURL;
+use Carbon\Carbon;
 
-class adminCommands extends Controller
+class AdminController extends Controller
 {
     // Data Page
     public function viewData( Request $request ){
@@ -28,12 +34,33 @@ class adminCommands extends Controller
         ]);
     }
 
+    public function current_guild_update( Request $request ){
+
+        // Retrieving Guild
+        $Guild = Guild::session_retrieve();
+
+        // Calling controller for updating guild infos
+        var_dump( (new UpdatingDatabaseController )->update_guild_informations( $request, $Guild->id ) );
+        var_dump( (new UpdatingDatabaseController )->update_guild_roster( $request, $Guild->id ) );
+        var_dump( (new UpdatingDatabaseController )->update_guild_raider_io( $request, $Guild->id ) );
+
+        $Guild->refresh();
+
+
+
+
+
+    }
+
+
+    // Custom API Request Page
     public function api_request(Request $request){
 
         $JSON = Null;
 
-        $Url = Url::guildInfos('zuljin', 'westfall-brewing-company');
-        var_dump( $request->input('url') );
+        $Url = $request->input('url') ?? Url::guildInfos('zuljin', 'westfall-brewing-company');
+
+        var_dump( $Url );
 
         if ( $request->input('url') ){
             $APIRequest = new APIRequest( $request->input('url') );
@@ -47,10 +74,8 @@ class adminCommands extends Controller
 
     public function fetch_realm_data(){
 
-        $Url = Url::realmIndex();
-        $Request = new APIRequest( $Url );
-        $Request->execute();
-        $Data = $Request->getFirst();
+        $Data = APIRequest::getFirstJSON( Url::realmIndex() );
+
         $Region = Token::retrieve()->getRegion();
 
         foreach( $Data->realms as $realm ){
@@ -66,5 +91,12 @@ class adminCommands extends Controller
         }
 
         return redirect()->route('admin.data')->with('status', 'Realms updated!');
+    }
+
+    public function testingRaiderIOAPI(){
+
+
+        
+
     }
 }

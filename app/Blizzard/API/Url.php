@@ -131,4 +131,9 @@ class Url {
         $Url = new Url("/data/wow/guild/{$realmSlug}/{$nameSlug}", 'profile', Token::retrieve()->getRegion() );
         return $Url->parse();        
     }
+
+    static public function guildRoster( $realmSlug, $nameSlug ){
+        $Url = new Url("/data/wow/guild/{$realmSlug}/{$nameSlug}/roster", 'profile', Token::retrieve()->getRegion() );
+        return $Url->parse();        
+    }
 }

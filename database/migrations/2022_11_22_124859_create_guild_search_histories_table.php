@@ -13,15 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        //
-        Schema::create('guilds', function (Blueprint $table) {
-            $table->integer('id')->unsigned();
-            $table->primary('id');
-            $table->string('name');
-            $table->string('faction');
-            $table->string('realmSlug');
-            $table->string('region');
-            $table->timestamp('created_timestamp')->nullable();
+        Schema::create('guild_search_histories', function (Blueprint $table) {
+            $table->id();
+            $table->integer('guild_id')->unsigned();
+            $table->integer('account_id')->unsigned();
             $table->timestamps();
         });
     }
@@ -33,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('guilds');
+        Schema::dropIfExists('guild_search_histories');
     }
 };

@@ -3,8 +3,9 @@
 namespace App\Curl\Src;
 
 use App\Curl\Curl;
+use App\Curl\Src\Handle;
 
-class handleList extends CurlList {
+class Handles extends CurlList {
 
     /**
      * Create a list of all Curl Handles Object
@@ -29,7 +30,7 @@ class handleList extends CurlList {
         }
     }
 
-    public function remove( \Application\Curl\Handle ... $CurlHandles ){
+    public function remove( Handle ... $CurlHandles ){
         foreach( $CurlHandles as $CurlHandle ){
             unset( $this->list[array_search($CurlHandle, $this->list, true )]);
         }
