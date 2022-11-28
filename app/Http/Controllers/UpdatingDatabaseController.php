@@ -99,20 +99,21 @@ class UpdatingDatabaseController extends Controller
 
     }
 
-    function update_guild_raider_io( Request $request, $Guild_ID ){
-
-        $Guild = Guild::findOrFail($Guild_ID);
+    function update_guild_raider_io( Request $request , $GuildID  ){
 
         // Setting vars
-        $guild_members = Character::all()->where('guild_id', 88410546);
+        $Guild = Guild::findOrFail($GuildID);    
         $Curl = new Curl();
         $fails = [];
         $upsertsData = [];
 
         // Looping through guild_members
-        foreach( $guild_members as $member ){
+        foreach( $Guild->members as $member ){
             $Curl->addUrl( RaiderIOURL::getCharacterInfos( $member->region, $member->realm->slug, $member->name) );
-            // break;
+        }
+
+        foreach( $Guild->tracked_characters as $member) {
+            $Curl->addUrl( RaiderIOURL::getCharacterInfos( $member->region, $member->realm->slug, $member->name) );
         }
 
         // Executing Curl
@@ -123,6 +124,7 @@ class UpdatingDatabaseController extends Controller
 
             if ( $response->getStatus() !== 200 ){
                 $fails[] = $response->getUrl();
+                continue;
             }
 
             $Data = $response->getJSON();
@@ -183,6 +185,7 @@ class UpdatingDatabaseController extends Controller
             
         }
 
-        return "RaiderIO : " . count($upsertsData) . " added/updated";
+        return "RaiderIO : " . count($upsertsData) . " added/updated and " . count($fails) . " errors";
     }
+    
 }

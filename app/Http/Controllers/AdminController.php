@@ -11,6 +11,8 @@ use App\Curl\Curl;
 use App\Models\Wow\Character;
 use App\Models\wow\Dungeon;
 use App\Models\wow\Guild;
+use App\Models\wow\playableClass;
+use App\Models\wow\playableRace;
 use App\Models\wow\Realm;
 use App\RaiderIO\API\Url as RaiderIOURL;
 use Carbon\Carbon;
@@ -46,9 +48,7 @@ class AdminController extends Controller
 
         $Guild->refresh();
 
-
-
-
+        return redirect()->route('admin.data')->with('status', 'Guild updated!');
 
     }
 
@@ -71,6 +71,34 @@ class AdminController extends Controller
         return view('admin/api_request', ['DataObject' => $JSON]);
         
     }
+
+    public function populate_database(){
+
+        $races = APIRequest::getFirstJSON( Url::playableRaces() );
+        $classes = APIRequest::getFirstJSON( Url::playableClasses() );
+
+        echo 'Updating races :<br>';
+        foreach( $races->races as $race ){
+            echo "Adding/Updating {$race->name} with id {$race->id} <br>";
+            playableRace::updateOrCreate([
+                'id' => $race->id,
+                'name' => $race->name
+            ]);
+        }
+
+        echo '<br>Updating classes <br>';
+        foreach( $classes->classes as $class ){
+            echo "Adding/Updating {$class->name} with id {$class->id} <br>";
+            playableClass::updateOrCreate([
+                'id' => $class->id,
+                'name' => $class->name
+            ]);
+        }
+
+        return redirect()->route('admin.data')->with('status', 'Races & Classes updated!');
+
+    }
+
 
     public function fetch_realm_data(){
 

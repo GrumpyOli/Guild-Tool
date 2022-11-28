@@ -2,11 +2,10 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\wow\Guild;
 use Closure;
 use Illuminate\Http\Request;
 
-class EnsureGuildIsSelected
+class EnsureUserBelongsToGuild
 {
     /**
      * Handle an incoming request.
@@ -18,14 +17,7 @@ class EnsureGuildIsSelected
     public function handle(Request $request, Closure $next)
     {
 
-        $Guild = Guild::session_retrieve();
-        
-        if ( !$Guild ){
-            return redirect()->route('GuildSelection');
-        }
-        
-        $Guild->refresh();
-        
+        dd( $request->guild_id );
         return $next($request);
     }
 }

@@ -2,6 +2,9 @@
 
 namespace App\Models\Wow;
 
+use App\Models\wow\Guild;
+use App\Models\wow\playableClass;
+use App\Models\wow\playableRace;
 use App\Models\wow\Realm;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -44,6 +47,19 @@ class Character extends Model
     public function realm(){
         return $this->belongsTo( Realm::class );
     }
+
+    public function race(){
+        return $this->belongsTo( playableRace::class, 'playable_race_id');
+    }
+
+    public function class(){
+        return $this->belongsTo( playableClass::class, 'playable_class_id');
+    }
+
+    public function guild(){
+        return $this->belongsTo( Guild::class );
+    }
+
 
     public static function findByNameAndRealm( $name, $realm, $findOrFail = true ){
 

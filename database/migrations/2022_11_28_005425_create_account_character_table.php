@@ -13,12 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('rosters', function (Blueprint $table) {
+        Schema::create('account_character', function (Blueprint $table) {
             $table->id();
-            $table->integer('char_id')->unsigned();
-            $table->integer('guild_id')->unsigned();
-            $table->smallInteger('rank')->unsigned();
+            $table->integer('account_id')->unsigned();
+            $table->integer('character_id')->unsigned();
             $table->timestamps();
+            $table->unique(['account_id', 'character_id']);
         });
     }
 
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rosters');
+        Schema::dropIfExists('account_character');
     }
 };

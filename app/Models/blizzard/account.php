@@ -3,6 +3,7 @@
 namespace App\Models\Blizzard;
 
 use App\Models\User;
+use App\Models\Wow\Character;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -37,6 +38,17 @@ class Account extends Model
 
     public function user(){
         return $this->hasOne( User::class );
+    }
+
+    public function isBelongsToGuild( int $guild_id ): bool {
+        return true;
+    }
+
+    public function characters(){
+        return $this->belongsToMany(
+            Character::class,
+            'account_character'
+        );
     }
 
 }

@@ -10,12 +10,15 @@
     @endif
 
     <h2>Quick command</h2>
+    
     <nav style="display: flex; justify-content: space-between">
-        <a target="blank" href="{{ route('admin.fetch_realm_data') }}">Fetch realm data</a>
+        <a href="{{ route('admin.fetch_realm_data') }}">Fetch realm data</a>
         <a target="blank" href="{{ route('admin.api_request') }}">Made a custom request</a>
-        <a target="blank" href="{{ route('admin.current_guild_update') }}">Guild Update</a>
-        <a href="{{ route('admin.current_guild_update_raiderio') }}" target="_blank" rel="noopener noreferrer">RaiderIO Testing</a>
+        <a href="{{ route('admin.current_guild_update') }}">Guild Update</a>
+        <a href="{{ route('admin.current_guild_update_raiderio', $Guild->id) }}" target="_blank" rel="noopener noreferrer">RaiderIO Testing</a>
+        <a href="{{ route('admin.populate_database') }}" rel="noopener noreferrer">Populate Database</a>
     </nav>
+
     <h2>Token & API settings</h2>
     <table>
         <tr>

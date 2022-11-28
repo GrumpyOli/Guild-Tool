@@ -1,0 +1,10 @@
+/* The little update button that we can found near the right of the screen  */
+.button-update {
+    font-size: 0.85rem;
+    text-align: right;
+}
+
+.button-add {
+    font-size: 0.85rem;
+    text-align: right;
+}

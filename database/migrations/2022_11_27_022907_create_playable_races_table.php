@@ -13,12 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('periods', function (Blueprint $table) {
-            $table->integer('id')->unsigned();
-            $table->dateTime('start');
-            $table->dateTime('end');
+        Schema::create('playable_races', function (Blueprint $table) {
+            
+            $table->smallInteger('id')->unsigned();
+            $table->string('name');
             $table->timestamps();
+
             $table->index('id');
+
         });
     }
 
@@ -29,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('periods');
+        Schema::dropIfExists('playable_races');
     }
 };

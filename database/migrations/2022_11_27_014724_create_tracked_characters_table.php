@@ -13,12 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('periods', function (Blueprint $table) {
-            $table->integer('id')->unsigned();
-            $table->dateTime('start');
-            $table->dateTime('end');
+        //
+        Schema::create('tracked_characters', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedInteger('guild_id');
+            $table->unsignedInteger('character_id');
             $table->timestamps();
-            $table->index('id');
+            $table->index('guild_id');
         });
     }
 
@@ -29,6 +30,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('periods');
+        //
+        Schema::dropIfExists('tracked_characters');
     }
 };

@@ -1,0 +1,24 @@
+.table-beauty {
+    margin: auto;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.table-beauty tr {
+    line-height: 2.50em;
+    background-color: rgba(0, 0, 0, 0.08);
+}
+
+.table-beauty td,
+.table-beauty th {
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+.table-beauty .center {
+    text-align: center;
+}
+
+.table-beauty .text-good {
+    color: green
+}

@@ -1,20 +1,77 @@
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap');
+@import 'buttons.css';
+@import 'panels.css';
+@import 'forms.css';
+@import 'notes.css';
+
+:root {
+    /* Colors */
+    --color-link: hsl(229, 67%, 50%);
+    --color-link-hover: hsl(229, 67%, 30%);
+    --color-background: hsl(0, 0%, 95%);
+
+    /* Font size  */
+    --fontsize-Title: 2.80em;
+}
 
 * { box-sizing: border-box; }
 
-html, body {
-    font-size: 1em;
-    font-family: 'Oswald', sans-serif;
+html {
     min-height: 100vh;
+    background-color: white;
+}
+
+html, body {
+    font-size: 1.07rem;
+    font-family: 'Oswald', sans-serif;
 }
 
 body {
-    display: grid;
+    /* display: grid;
     grid-template-rows: 5rem auto;
-    grid-template-columns: 400px auto;
+    grid-template-columns: 400px auto; */
+    padding: 0 1.50rem;
+    padding-bottom: 3rem;;
+    width: 1200px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-background);
+}
+
+.layout-header,
+.layout-menu,
+.layout-mainContent {
+    
+}
+
+h1 {
+    font-size: var(--fontsize-Title);
 }
 
 .layout-header {
+    text-align: center;
+    font-size: 4em;
+}
+
+.layout-menu {
+    display: flex;
+    justify-content: space-evenly
+}
+
+a {
+    text-decoration: none;
+    padding: 0.50em;
+    color: var( --color-link );
+}
+
+a:hover {
+    color: var(--color-link-hover);
+    transition: all 100ms ease-in-out;
+    transform: scale(1.35);
+}
+
+/* .layout-header {
     grid-column-start: 1;
     grid-column-end: span 2;
 }
@@ -29,4 +86,14 @@ body {
     grid-column-start: 2;
     grid-row-start: 2;
     background-color: cadetblue;
+} */
+
+.two_columns{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly
+}
+
+.column {
+
 }

@@ -136,4 +136,26 @@ class Url {
         $Url = new Url("/data/wow/guild/{$realmSlug}/{$nameSlug}/roster", 'profile', Token::retrieve()->getRegion() );
         return $Url->parse();        
     }
+
+    static public function playableClasses( $fetch = 'index'){
+        $Url = new Url("/data/wow/playable-class/{$fetch}", 'static');
+        return $Url->parse();        
+    }
+
+    static public function playableRaces( $fetch = 'index' ){
+        $Url = new Url("/data/wow/playable-race/{$fetch}", 'static');
+        return $Url->parse();        
+    }
+
+    static public function character( $realmSlug, $characterName){
+        $characterName = urlencode( $characterName );
+        $Url = new Url("/profile/wow/character/{$realmSlug}/{$characterName}", 'profile');
+        return $Url->parse();        
+    }
+
+    static public function accountProfilSummary(){
+        return ( new self('/profile/user/wow', 'profile') )->parse();
+    }
+
+    
 }

@@ -3,7 +3,9 @@
 namespace App\Models\wow;
 
 use App\Blizzard\API\Url;
+use App\Models\Note;
 use App\Models\Wow\Character;
+use App\Models\wow\guild\Rank;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -72,7 +74,33 @@ class Guild extends Model
         return $this->belongsTo( Realm::class, 'realmSlug', 'slug');
     }
 
-    public function characters(){
+    public function members(){
         return $this->HasMany( Character::class );
+    }
+
+    public function tracked_characters(){
+        return $this->belongsToMany( 
+            Character::class,
+            'tracked_characters',
+            'guild_id',
+            'character_id'
+        );
+    }
+
+    public function linked_characters(){
+        return $this->belongsToMany( 
+            Character::class,
+            'linked_characters',
+            'guild_id',
+            'character_id'
+        );
+    }
+
+    public function ranks(){
+        return $this->hasMany( Rank::class );
+    }
+
+    public function notes(){
+        return $this->hasMany( Note::class );
     }
 }

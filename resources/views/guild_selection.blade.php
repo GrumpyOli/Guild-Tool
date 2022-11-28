@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <title>Guild-Tool - Guild Selection</title>
-    <link rel="stylesheet" href="{{ asset('css/layout-guildSelection.css') }}">
+    <link rel="stylesheet" href="{{ asset('public/css/layout-guildSelection.css') }}">
 </head>
 <body>
 

@@ -1,0 +1,28 @@
+.forms-beauty{
+    width: 100%;
+    padding: 1.20rem;
+    background-color: hsla(0, 0%, 100%, 85%);
+    border-radius: 0.10em;
+}
+
+.forms-beauty table {
+    width: 100%;
+}
+
+.forms-beauty th {
+    width: 30%;
+}
+
+.forms-beauty td {
+    width: max-content;
+    text-align: left;
+}
+
+.forms-beauty input {
+    width: 100%;
+}
+
+.forms-beauty textarea {
+    width: 100%;
+    min-height: 10em;
+}

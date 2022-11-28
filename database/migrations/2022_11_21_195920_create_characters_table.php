@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('characters', function (Blueprint $table) {
             $table->integer('id')->unsigned();
             $table->string('name');
+            $table->string('faction');
             $table->string('region');
             $table->integer('guild_id')->unsigned()->nullable();
             $table->unsignedSmallInteger('rank')->nullable();

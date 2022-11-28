@@ -1,0 +1,48 @@
+/*
+// Panels are little div for errors, warning, infos ..
+*/
+
+/* Listing of all shared attributes */
+.panel-informations,
+.panel-error {
+    border-radius: 0.15em;
+    margin: 3em auto;
+    padding: 1.50em;
+    width: 90%;
+
+    /* Border attributes  */
+    border-left-width: 0.25em;
+    border-left-style: solid;
+
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+}
+
+
+.panel-informations {
+
+    /* Text color  */
+    color: #17a2b8;
+
+    /* Background color */
+    background-color: hsl(194, 66%, 97%);
+
+    /* Border css */
+    border-color: #5bc0de;
+    
+}
+
+.panel-error {
+
+    /* Text color  */
+    color: hsl(354, 70%, 5%);
+
+    /* Background color */
+    background-color: hsl(354, 70%, 97%);
+
+    /* Border css */
+    border-color: hsl(354, 70%, 54%);
+    
+}
+

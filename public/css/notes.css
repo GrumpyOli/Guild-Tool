@@ -1,0 +1,25 @@
+:root {
+    --color-note-background: rgb(255, 255, 255);
+    --color-border: rgb(207, 207, 207);
+    --color-timestamps: hsl(0, 0%, 30%);
+}
+
+.note {
+    background-color: var(--color-note-background);
+    padding: 0.35em;
+    border-radius: 0.50em;
+    margin-top: 1.50em;
+}
+
+.note .owner {
+    border-bottom-color: var(--color-border);
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    margin-bottom: 1rem;
+}
+
+.note .timestamps {
+    text-align: right;
+    font-size: 0.70em;
+    color: var(--color-timestamps)
+}
