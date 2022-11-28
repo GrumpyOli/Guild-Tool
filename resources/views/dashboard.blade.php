@@ -3,5 +3,6 @@
 <!-- @section('title', 'Dashboard') -->
 
 @section('mainContent')
-    Main Content
+    <h1>Dashboard</h1>
+    <x-errorPanel/>
 @endsection

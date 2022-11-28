@@ -4,6 +4,7 @@
 
 @section('mainContent')
 <h1>Notes</h1>
+
 <div class="button-add"><a href="{{ route('guild.notes_add') }}">Add</a></div>
 
 @foreach( Guild()->notes as $note )

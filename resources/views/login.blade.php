@@ -9,10 +9,7 @@
 <body>
     You must be logged to blizzard to continue. Click <a href="{{ $BlizzardLink }}">here</a> to log in with blizzard.
 
-    @foreach ($errors->all() as $error)
+    <x-errorPanel/>
 
-  <div>{{ $error }}</div>
-
-    @endforeach
 </body>
 </html>

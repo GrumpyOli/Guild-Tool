@@ -11,6 +11,7 @@ use App\Models\Linked_Character;
 use App\Models\wow\Guild;
 use App\Models\wow\guild\Rank;
 use App\Models\wow\Realm;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -104,7 +105,13 @@ class GuildController extends Controller
     function viewRoster( Request $request ){
 
         $Guild = Guild::session_retrieve()->refresh();
+
         $Ranks = $Guild->ranks->keyBy('level');
+
+        $messages = [ 
+            "You'll find here the complete roster sorted by rank position. You can click on headers to change the sorting if you desire.",
+            "Last update: " . Carbon::parse($Guild->updated_at)->tz('America/Montreal')
+        ];
 
         $trackedCharactersID = $Guild->tracked_characters->pluck('id');
         // dd ( $trackedCharactersID );
@@ -112,7 +119,8 @@ class GuildController extends Controller
         return view('Roster', [
             'Guild' => $Guild,
             'trackedCharactersID' => $trackedCharactersID,
-            'Ranks' => $Ranks
+            'Ranks' => $Ranks,
+            'messages' => $messages
         ]);
 
     }

@@ -7,15 +7,7 @@
 
 <h2>Add a character</h2>
 
-@if ($errors->any())
-<div class="alert alert-danger">
-    <ul>
-        @foreach ($errors->all() as $error)
-        <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-</div>
-@endif
+<x-errorPanel/>
 
 <p>You can add a character to the guild if this character is not in the guild by typing his name and server. Then click add</p>
 <form action="{{ route('guild.linked_characters') }}" method="post">

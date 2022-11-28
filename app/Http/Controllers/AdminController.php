@@ -46,6 +46,8 @@ class AdminController extends Controller
         var_dump( (new UpdatingDatabaseController )->update_guild_roster( $request, $Guild->id ) );
         var_dump( (new UpdatingDatabaseController )->update_guild_raider_io( $request, $Guild->id ) );
 
+        $Guild->updated_at = Carbon::now();
+        $Guild->save();
         $Guild->refresh();
 
         return redirect()->route('admin.data')->with('status', 'Guild updated!');

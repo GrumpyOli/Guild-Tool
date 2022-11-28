@@ -5,6 +5,8 @@
 @section('mainContent')
 <h1>Guild Rank</h1>
 
+<x-errorPanel/>
+
 @if ( session('status') )
 <p>{{ session('status') }}</p>
 @endif

@@ -5,17 +5,18 @@
 @section('mainContent')
     <h1>Guild Roster</h1>
     
+    <x-infos :messages="$messages"/>
     <p>There is currently {{ count( $Guild->members ) }} members</p>
 
-    <table class="table-beauty">
+    <table class="table-beauty" id="table_members">
         <tr>
 
-            <th>Character</th>
-            <th>Race</th>
-            <th>Class</th>
-            <th>Rank</th>
-            <th>Level</th>
-            <th>Tracked</th>
+            <th onclick="sortTable(0,'table_members')">Character</th>
+            <th onclick="sortTable(1,'table_members')">Race</th>
+            <th onclick="sortTable(2,'table_members')">Class</th>
+            <th onclick="sortTable(3,'table_members')">Rank</th>
+            <th onclick="sortTable(4,'table_members')">Level</th>
+            <th onclick="sortTable(5,'table_members')">Tracked</th>
             
         </tr>
 
@@ -42,9 +43,9 @@
             </td>
 
             <td class="center">
-                {{  $trackedCharactersID->contains( $Member->id ) ? 'Yes' : 'No' }} <a href="{{ route('guild.change_tracking', $Member->id)}}">(Change)</a>
+                <span id='td{{$Member->id}}'>{{ $trackedCharactersID->contains( $Member->id ) ? 'Yes' : 'No' }}</span>
+                <a href="javascript:toggle_tracking({{ $Guild->id }},{{ $Member->id }}, 'td{{$Member->id}}')">(Change)</a>
             </td>
-
         </tr>
         @endforeach
 

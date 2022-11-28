@@ -4,13 +4,7 @@
 
 @section('mainContent')
 <h1>Add a note</h1>
-@if ( $errors->any() )
-<div class="panel-error">
-    @foreach ($errors->all() as $message)
-    <p>{{ $message }}</p>
-    @endforeach
-</div>
-@endif
+<x-errorPanel/>
 <form action="{{ route('guild.notes_add') }}" method="post">
     @csrf
     <div class="forms-beauty">
